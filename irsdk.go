@@ -33,9 +33,9 @@ func (sdk *IRSDK) WaitForData(timeout time.Duration) bool {
 	return false
 }
 
-func (sdk *IRSDK) GetVar(name string) (variable, error) {
+func (sdk *IRSDK) GetVar(name string) (Variable, error) {
 	if !sessionStatusOK(sdk.h.status) {
-		return variable{}, fmt.Errorf("Session is not active")
+		return Variable{}, fmt.Errorf("Session is not active")
 	}
 	sdk.tVars.mux.Lock()
 	if v, ok := sdk.tVars.vars[name]; ok {
@@ -43,7 +43,7 @@ func (sdk *IRSDK) GetVar(name string) (variable, error) {
 		return v, nil
 	}
 	sdk.tVars.mux.Unlock()
-	return variable{}, fmt.Errorf("Telemetry variable %q not found", name)
+	return Variable{}, fmt.Errorf("Telemetry variable %q not found", name)
 }
 
 func (sdk *IRSDK) GetSession() iryaml.Session {
