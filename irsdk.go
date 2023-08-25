@@ -2,21 +2,22 @@ package irsdk
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
+	"github.com/go-yaml/yaml"
+	"github.com/hfoxy/iracing-sdk/iryaml"
 	"io/ioutil"
 	"log"
 	"strings"
 	"time"
 
+	"github.com/hfoxy/iracing-sdk/lib/winevents"
 	"github.com/hidez8891/shm"
-	"github.com/quimcalpe/iracing-sdk/lib/winevents"
 )
 
 // IRSDK is the main SDK object clients must use
 type IRSDK struct {
 	r             reader
 	h             *header
-	session       Session
+	session       iryaml.Session
 	s             []string
 	tVars         *TelemetryVars
 	lastValidData int64
@@ -45,7 +46,7 @@ func (sdk *IRSDK) GetVar(name string) (variable, error) {
 	return variable{}, fmt.Errorf("Telemetry variable %q not found", name)
 }
 
-func (sdk *IRSDK) GetSession() Session {
+func (sdk *IRSDK) GetSession() iryaml.Session {
 	return sdk.session
 }
 
@@ -76,7 +77,7 @@ func (sdk *IRSDK) IsConnected() bool {
 	return false
 }
 
-// ExportTo exports current memory data to a file
+// ExportIbtTo exports current memory data to a file
 func (sdk *IRSDK) ExportIbtTo(fileName string) {
 	rbuf := make([]byte, fileMapSize)
 	_, err := sdk.r.ReadAt(rbuf, 0)
@@ -86,7 +87,7 @@ func (sdk *IRSDK) ExportIbtTo(fileName string) {
 	ioutil.WriteFile(fileName, rbuf, 0644)
 }
 
-// ExportTo exports current session yaml data to a file
+// ExportSessionTo exports current session yaml data to a file
 func (sdk *IRSDK) ExportSessionTo(fileName string) {
 	y := strings.Join(sdk.s, "\n")
 	ioutil.WriteFile(fileName, []byte(y), 0644)
