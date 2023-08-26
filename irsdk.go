@@ -46,6 +46,28 @@ func (sdk *IRSDK) GetVar(name string) (Variable, error) {
 	return Variable{}, fmt.Errorf("Telemetry variable %q not found", name)
 }
 
+func (sdk *IRSDK) GetVarValue(name string) (interface{}, error) {
+	var r Variable
+	var err error
+
+	if r, err = sdk.GetVar(name); err == nil {
+		return r.Value, nil
+	}
+
+	return r, err
+}
+
+func (sdk *IRSDK) GetVarValues(name string) (interface{}, error) {
+	var r Variable
+	var err error
+
+	if r, err = sdk.GetVar(name); err == nil {
+		return r.Values, nil
+	}
+
+	return r, err
+}
+
 func (sdk *IRSDK) GetSession() iryaml.Session {
 	return sdk.session
 }

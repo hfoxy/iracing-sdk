@@ -27,12 +27,13 @@ const (
 type Variable struct {
 	VarType     VarType // irsdk_VarType
 	offset      int     // offset fron start of buffer row
-	count       int     // number of entrys (array) so length in bytes would be irsdk_VarTypeBytes[type] * count
+	Count       int     // number of entrys (array) so length in bytes would be irsdk_VarTypeBytes[type] * count
 	countAsTime bool
 	Name        string
 	Desc        string
 	Unit        string
 	Value       interface{}
+	Values      interface{}
 	rawBytes    []byte
 }
 
@@ -105,6 +106,7 @@ func readVariableHeaders(r reader, h *header) *TelemetryVars {
 			bytesToString(rbuf[112:144]),
 			nil,
 			nil,
+			nil,
 		}
 		vars.vars[v.Name] = v
 	}
@@ -125,47 +127,91 @@ func readVariableValues(sdk *IRSDK) bool {
 				var rbuf []byte
 				switch v.VarType {
 				case 0:
-					rbuf = make([]byte, 1)
-					_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset))
-					if err != nil {
-						log.Fatal(err)
+					values := make([]string, v.Count)
+					for i := 0; i < v.Count; i++ {
+						rbuf = make([]byte, 1)
+						_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset+(1*i)))
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						values[i] = string(rbuf[0])
 					}
-					v.Value = string(rbuf[0])
+
+					v.Value = values[0]
+					v.Values = values
 				case 1:
-					rbuf = make([]byte, 1)
-					_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset))
-					if err != nil {
-						log.Fatal(err)
+					values := make([]bool, v.Count)
+					for i := 0; i < v.Count; i++ {
+						rbuf = make([]byte, 1)
+						_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset+(1*i)))
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						values[i] = int(rbuf[0]) > 0
 					}
-					v.Value = int(rbuf[0]) > 0
+
+					v.Value = values[0]
+					v.Values = values
 				case 2:
-					rbuf = make([]byte, 4)
-					_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset))
-					if err != nil {
-						log.Fatal(err)
+					values := make([]int, v.Count)
+					for i := 0; i < v.Count; i++ {
+						rbuf = make([]byte, 4)
+						_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset+(4*i)))
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						values[i] = byte4ToInt(rbuf)
 					}
-					v.Value = byte4ToInt(rbuf)
+
+					v.Value = values[0]
+					v.Values = values
 				case 3:
-					rbuf = make([]byte, 4)
-					_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset))
-					if err != nil {
-						log.Fatal(err)
+					values := make([][]bool, v.Count)
+					for i := 0; i < v.Count; i++ {
+						rbuf = make([]byte, 4)
+						_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset+(4*i)))
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						values[i] = byte4toBitField(rbuf)
 					}
-					v.Value = byte4toBitField(rbuf)
+
+					v.Value = values[0]
+					v.Values = values
 				case 4:
-					rbuf = make([]byte, 4)
-					_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset))
-					if err != nil {
-						log.Fatal(err)
+					values := make([]float32, v.Count)
+					for i := 0; i < v.Count; i++ {
+						rbuf = make([]byte, 4)
+						_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset+(4*i)))
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						values[i] = byte4ToFloat(rbuf)
 					}
-					v.Value = byte4ToFloat(rbuf)
+
+					v.Value = values[0]
+					v.Values = values
 				case 5:
-					rbuf = make([]byte, 8)
-					_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset))
-					if err != nil {
-						log.Fatal(err)
+					values := make([]float64, v.Count)
+					for i := 0; i < v.Count; i++ {
+						rbuf = make([]byte, 8)
+						_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset+(8*i)))
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						values[i] = byte8ToFloat(rbuf)
 					}
-					v.Value = byte8ToFloat(rbuf)
+
+					v.Value = values[0]
+					v.Values = values
+				default:
+					log.Printf("unknown var type: %d", v.VarType)
 				}
 				v.rawBytes = rbuf
 				sdk.tVars.vars[varName] = v
