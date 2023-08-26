@@ -33,16 +33,37 @@ func (sdk *IRSDK) WaitForData(timeout time.Duration) bool {
 	return false
 }
 
+func (sdk *IRSDK) GetVars() ([]Variable, error) {
+	if !sessionStatusOK(sdk.h.status) {
+		return make([]Variable, 0), fmt.Errorf("session is not active")
+	}
+
+	results := make([]Variable, len(sdk.tVars.vars))
+
+	sdk.tVars.mux.Lock()
+	defer sdk.tVars.mux.Unlock()
+
+	idx := 0
+	for _, variable := range sdk.tVars.vars {
+		results[idx] = variable
+		idx++
+	}
+
+	return results, nil
+}
+
 func (sdk *IRSDK) GetVar(name string) (Variable, error) {
 	if !sessionStatusOK(sdk.h.status) {
-		return Variable{}, fmt.Errorf("Session is not active")
+		return Variable{}, fmt.Errorf("session is not active")
 	}
+
 	sdk.tVars.mux.Lock()
+	defer sdk.tVars.mux.Unlock()
+
 	if v, ok := sdk.tVars.vars[name]; ok {
-		sdk.tVars.mux.Unlock()
 		return v, nil
 	}
-	sdk.tVars.mux.Unlock()
+
 	return Variable{}, fmt.Errorf("Telemetry variable %q not found", name)
 }
 
@@ -77,14 +98,14 @@ func (sdk *IRSDK) GetLastVersion() int {
 		return -1
 	}
 	sdk.tVars.mux.Lock()
+	defer sdk.tVars.mux.Unlock()
 	last := sdk.tVars.lastVersion
-	sdk.tVars.mux.Unlock()
 	return last
 }
 
 func (sdk *IRSDK) GetSessionData(path string) (string, error) {
 	if !sessionStatusOK(sdk.h.status) {
-		return "", fmt.Errorf("Session not connected")
+		return "", fmt.Errorf("session not connected")
 	}
 	return getSessionDataPath(sdk.s, path)
 }
