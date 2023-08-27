@@ -34,7 +34,7 @@ type Variable struct {
 	Unit        string
 	Value       interface{}
 	Values      interface{}
-	rawBytes    []byte
+	RawBytes    []byte
 }
 
 func (v Variable) String() string {
@@ -213,7 +213,7 @@ func readVariableValues(sdk *IRSDK) bool {
 				default:
 					log.Printf("unknown var type: %d", v.VarType)
 				}
-				v.rawBytes = rbuf
+				v.RawBytes = rbuf
 				sdk.tVars.vars[varName] = v
 			}
 		}
