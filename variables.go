@@ -126,7 +126,7 @@ func readVariableValues(sdk *IRSDK) bool {
 			for varName, v := range sdk.tVars.vars {
 				var rbuf []byte
 				switch v.VarType {
-				case 0:
+				case VarTypeChar:
 					values := make([]string, v.Count)
 					for i := 0; i < v.Count; i++ {
 						rbuf = make([]byte, 1)
@@ -140,7 +140,7 @@ func readVariableValues(sdk *IRSDK) bool {
 
 					v.Value = values[0]
 					v.Values = values
-				case 1:
+				case VarTypeBool:
 					values := make([]bool, v.Count)
 					for i := 0; i < v.Count; i++ {
 						rbuf = make([]byte, 1)
@@ -154,7 +154,7 @@ func readVariableValues(sdk *IRSDK) bool {
 
 					v.Value = values[0]
 					v.Values = values
-				case 2:
+				case VarTypeInt:
 					values := make([]int, v.Count)
 					for i := 0; i < v.Count; i++ {
 						rbuf = make([]byte, 4)
@@ -168,7 +168,7 @@ func readVariableValues(sdk *IRSDK) bool {
 
 					v.Value = values[0]
 					v.Values = values
-				case 3:
+				case VarTypeBitField:
 					values := make([]int, v.Count)
 					for i := 0; i < v.Count; i++ {
 						rbuf = make([]byte, 4)
@@ -182,7 +182,7 @@ func readVariableValues(sdk *IRSDK) bool {
 
 					v.Value = values[0]
 					v.Values = values
-				case 4:
+				case VarTypeFloat:
 					values := make([]float32, v.Count)
 					for i := 0; i < v.Count; i++ {
 						rbuf = make([]byte, 4)
@@ -196,7 +196,7 @@ func readVariableValues(sdk *IRSDK) bool {
 
 					v.Value = values[0]
 					v.Values = values
-				case 5:
+				case VarTypeDouble:
 					values := make([]float64, v.Count)
 					for i := 0; i < v.Count; i++ {
 						rbuf = make([]byte, 8)
