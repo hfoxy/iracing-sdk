@@ -13,8 +13,24 @@ import (
 	"github.com/hidez8891/shm"
 )
 
+type SDK interface {
+	WaitForData(timeout time.Duration) bool
+	GetVars() ([]Variable, error)
+	GetVar(name string) (Variable, error)
+	GetVarValue(name string) (interface{}, error)
+	GetVarValues(name string) (interface{}, error)
+	GetSession() iryaml.Session
+	GetLastVersion() int
+	IsConnected() bool
+	ExportIbtTo(fileName string)
+	ExportSessionTo(fileName string)
+	BroadcastMsg(msg Msg)
+	Close()
+}
+
 // IRSDK is the main SDK object clients must use
 type IRSDK struct {
+	SDK
 	r             reader
 	h             *header
 	session       iryaml.Session
