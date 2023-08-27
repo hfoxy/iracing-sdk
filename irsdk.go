@@ -165,7 +165,7 @@ func (sdk *IRSDK) Close() {
 }
 
 // Init creates a SDK instance to operate with
-func Init(r reader) IRSDK {
+func Init(r reader) SDK {
 	if r == nil {
 		var err error
 		r, err = shm.Open(fileMapName, fileMapSize)
@@ -177,7 +177,7 @@ func Init(r reader) IRSDK {
 	sdk := IRSDK{r: r, lastValidData: 0}
 	winevents.OpenEvent(dataValidEventName)
 	initIRSDK(&sdk)
-	return sdk
+	return &sdk
 }
 
 func initIRSDK(sdk *IRSDK) {
