@@ -169,7 +169,7 @@ func readVariableValues(sdk *IRSDK) bool {
 					v.Value = values[0]
 					v.Values = values
 				case 3:
-					values := make([][]bool, v.Count)
+					values := make([]int, v.Count)
 					for i := 0; i < v.Count; i++ {
 						rbuf = make([]byte, 4)
 						_, err := sdk.r.ReadAt(rbuf, int64(vb.bufOffset+v.offset+(4*i)))
@@ -177,7 +177,7 @@ func readVariableValues(sdk *IRSDK) bool {
 							log.Fatal(err)
 						}
 
-						values[i] = byte4toBitField(rbuf)
+						values[i] = byte4ToInt(rbuf)
 					}
 
 					v.Value = values[0]

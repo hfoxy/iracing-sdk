@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var sdk irsdk.IRSDK
+var sdk irsdk.SDK
 
 func main() {
 	gracefulShutdown := make(chan os.Signal, 1)
