@@ -24,6 +24,7 @@ type SDK interface {
 	IsConnected() bool
 	ExportIbtTo(fileName string)
 	ExportSessionTo(fileName string)
+	GetYaml() string
 	BroadcastMsg(msg Msg)
 	Close()
 }
@@ -152,6 +153,10 @@ func (sdk *IRSDK) ExportSessionTo(fileName string) {
 	ioutil.WriteFile(fileName, []byte(y), 0644)
 }
 
+func (sdk *IRSDK) GetYaml() string {
+	return strings.Join(sdk.s, "\n")
+}
+
 func (sdk *IRSDK) BroadcastMsg(msg Msg) {
 	if msg.P2 == nil {
 		msg.P2 = 0
@@ -174,10 +179,10 @@ func Init(r reader) SDK {
 		}
 	}
 
-	sdk := IRSDK{r: r, lastValidData: 0}
+	sdk := &IRSDK{r: r, lastValidData: 0}
 	winevents.OpenEvent(dataValidEventName)
-	initIRSDK(&sdk)
-	return &sdk
+	initIRSDK(sdk)
+	return sdk
 }
 
 func initIRSDK(sdk *IRSDK) {
