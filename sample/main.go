@@ -40,6 +40,9 @@ func main() {
 				sdk.ExportSessionTo("session.yaml")
 			}
 
+			ver := sdk.GetLastVersion()
+			log.Printf("version: %d", ver)
+
 			va, _ := sdk.GetVar("Speed")
 			log.Printf("speed: %#v (%s)", va.Value, va.Unit)
 

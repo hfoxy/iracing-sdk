@@ -14,6 +14,7 @@ import (
 )
 
 type SDK interface {
+	RefreshSession()
 	WaitForData(timeout time.Duration) bool
 	GetVars() ([]Variable, error)
 	GetVar(name string) (Variable, error)
@@ -40,13 +41,27 @@ type IRSDK struct {
 	lastValidData int64
 }
 
+func (sdk *IRSDK) RefreshSession() {
+	if sessionStatusOK(sdk.h.status) {
+		sRaw := readSessionData(sdk.r, sdk.h)
+		err := yaml.Unmarshal([]byte(sRaw), &sdk.session)
+		if err != nil {
+			log.Fatal(err)
+		}
+		sdk.s = strings.Split(sRaw, "\n")
+	}
+}
+
 func (sdk *IRSDK) WaitForData(timeout time.Duration) bool {
 	if !sdk.IsConnected() {
 		initIRSDK(sdk)
 	}
+
 	if winevents.WaitForSingleObject(timeout) {
+		sdk.RefreshSession()
 		return readVariableValues(sdk)
 	}
+
 	return false
 }
 
