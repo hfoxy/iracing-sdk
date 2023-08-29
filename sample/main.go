@@ -55,9 +55,9 @@ func main() {
 			v, _ = sdk.GetVarValues("CarIdxClassPosition")
 			log.Printf("class position: %#v", v)
 
-			//for _, driver := range sdk.GetSession().DriverInfo.Drivers {
-			//	logging.Logger.Infof("Driver: %s", driver.UserName)
-			//}
+			for _, driver := range sdk.GetSession().DriverInfo.Drivers {
+				log.Printf("Driver: %s", driver.UserName)
+			}
 		}
 	}
 }

@@ -20,7 +20,7 @@ type SDK interface {
 	GetVar(name string) (Variable, error)
 	GetVarValue(name string) (interface{}, error)
 	GetVarValues(name string) (interface{}, error)
-	GetSession() iryaml.Session
+	GetSession() iryaml.IRSession
 	GetLastVersion() int
 	IsConnected() bool
 	ExportIbtTo(fileName string)
@@ -35,7 +35,7 @@ type IRSDK struct {
 	SDK
 	r             reader
 	h             *header
-	session       iryaml.Session
+	session       iryaml.IRSession
 	s             []string
 	tVars         *TelemetryVars
 	lastValidData int64
@@ -121,7 +121,7 @@ func (sdk *IRSDK) GetVarValues(name string) (interface{}, error) {
 	return r, err
 }
 
-func (sdk *IRSDK) GetSession() iryaml.Session {
+func (sdk *IRSDK) GetSession() iryaml.IRSession {
 	return sdk.session
 }
 
