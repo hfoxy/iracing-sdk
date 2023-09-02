@@ -25,13 +25,13 @@ type Driver struct {
 	CarClassWeightPenalty   string      `yaml:"CarClassWeightPenalty"`
 	CarClassPowerAdjust     string      `yaml:"CarClassPowerAdjust"`
 	CarClassDryTireSetLimit string      `yaml:"CarClassDryTireSetLimit"`
-	CarClassColor           int         `yaml:"CarClassColor"`
+	CarClassColor           string      `yaml:"CarClassColor"`
 	CarClassEstLapTime      float64     `yaml:"CarClassEstLapTime"`
 	IRating                 int         `yaml:"IRating"`
 	LicLevel                int         `yaml:"LicLevel"`
 	LicSubLevel             int         `yaml:"LicSubLevel"`
 	LicString               string      `yaml:"LicString"`
-	LicColor                int         `yaml:"LicColor"`
+	LicColor                string      `yaml:"LicColor"`
 	IsSpectator             int         `yaml:"IsSpectator"`
 	CarDesignStr            string      `yaml:"CarDesignStr"`
 	HelmetDesignStr         string      `yaml:"HelmetDesignStr"`

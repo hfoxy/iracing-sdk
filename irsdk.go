@@ -46,7 +46,7 @@ func (sdk *IRSDK) RefreshSession() {
 		sRaw := readSessionData(sdk.r, sdk.h)
 		err := yaml.Unmarshal([]byte(sRaw), &sdk.session)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		sdk.s = strings.Split(sRaw, "\n")
 	}
@@ -211,7 +211,7 @@ func initIRSDK(sdk *IRSDK) {
 		sRaw := readSessionData(sdk.r, &h)
 		err := yaml.Unmarshal([]byte(sRaw), &sdk.session)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		sdk.s = strings.Split(sRaw, "\n")
 		sdk.tVars = readVariableHeaders(sdk.r, &h)

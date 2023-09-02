@@ -81,8 +81,8 @@ type WeekendOptions struct {
 	HasOpenRegistration        int    `yaml:"HasOpenRegistration"`
 	HardcoreLevel              int    `yaml:"HardcoreLevel"`
 	NumJokerLaps               int    `yaml:"NumJokerLaps"`
-	IncidentLimit              int    `yaml:"IncidentLimit"`
-	FastRepairsLimit           int    `yaml:"FastRepairsLimit"`
+	IncidentLimit              string `yaml:"IncidentLimit"`
+	FastRepairsLimit           string `yaml:"FastRepairsLimit"`
 	GreenWhiteCheckeredLimit   int    `yaml:"GreenWhiteCheckeredLimit"`
 }
 
