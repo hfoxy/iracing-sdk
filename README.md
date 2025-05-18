@@ -8,69 +8,10 @@ You need a gcc compiler to build the SDK, Golang does not have (as far as I know
 The easiest way is to install MiniGw for 64 bits: https://sourceforge.net/projects/mingw-w64/
 
 With a gcc compiler in place, you can follow the standard path get to external libs in Go
-1. Execute `go get github.com/quimcalpe/iracing-sdk`
-
-## Usage
-
-Simplest example:
-```go
-package main
-
-import (
-    "fmt"
-    "github.com/quimcalpe/iracing-sdk"
-)
-
-func main() {
-    var sdk irsdk.IRSDK
-    sdk = irsdk.Init(nil)
-    defer sdk.Close()
-    speed, _ := sdk.GetVar("Speed")
-    fmt.Printf("Speed: %s", speed)
-}
-```
-
-Get data in a loop live
-```go
-package main
-
-import (
-    "fmt"
-    "log"
-
-    "github.com/quimcalpe/iracing-sdk"
-)
-
-func main() {
-    var sdk irsdk.IRSDK
-    sdk = irsdk.Init(nil)
-    defer sdk.Close()
-
-    for {
-        sdk.WaitForData(100 * time.Millisecond)
-        speed, err := sdk.GetVar("Speed")
-        if err != nil {
-            log.Fatal(err)
-        }
-        fmt.Printf("Speed: %s", speed)
-    }
-}
-```
-
-Work with an offline ibt file
-```go
-reader, err := os.Open("data.ibt")
-if err != nil {
-    log.Fatal(err)
-}
-sdk = irsdk.Init(reader)
-...
-```
+1. Execute `go get github.com/hfoxy/iracing-sdk`
 
 ## Examples
 
-* [Export](examples/export) Telemetry Data and Session yaml to files
+* [Standard](examples/windows.go): Normal usage of SDK
 
-* Broadcast [Commands](examples/commands) to iRacing
-
-* Simple [Dashboard](examples/dashboard) for external monitors or phones
+* [Mock](examples/mock/mock.go): Read data from a mocked replay file
