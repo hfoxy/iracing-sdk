@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	irsdk "github.com/hfoxy/iracing-sdk/pkg"
 	"log/slog"
 	"time"
@@ -18,8 +17,7 @@ func main() {
 	defer sdk.Close()
 
 	logger = logger.With("module", "example")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	ctx := context.Background()
 
 	ticker := time.NewTicker(100 * time.Millisecond)
 	defer ticker.Stop()
@@ -34,7 +32,13 @@ func main() {
 				return
 			}
 
-			fmt.Printf("data received: %t/%t\n", ok, sdk.IsConnected())
+			logger.Info("data received", "ok", ok, "connected", sdk.IsConnected())
+
+			if ok && sdk.IsConnected() {
+				var v interface{}
+				v, err = sdk.GetVarValue("Speed")
+				logger.Info("data", "value", v)
+			}
 		case <-ctx.Done():
 			logger.Error("context done", "error", err)
 			return

@@ -104,7 +104,7 @@ func (sdk *MockSDK) WaitForData(timeout time.Duration) (bool, error) {
 	millis := t.UnixMilli()
 
 	if millis < sdk.nextEntry.Timestamp {
-		return false, nil
+		return true, nil
 	}
 
 	r := row{}
@@ -147,8 +147,6 @@ func (sdk *MockSDK) WaitForData(timeout time.Duration) (bool, error) {
 				break
 			}
 		}
-
-		sdk.logger.Debug("received data", "read", read, "timestamp", r.Timestamp, "connected", r.Connected, "not_ok", r.NotOk, "yaml_data", r.YamlData, "variable_data", r.VariableData)
 
 		if end {
 			sdk.ended = true
@@ -202,16 +200,39 @@ func (sdk *MockSDK) GetVars() ([]Variable, error) {
 }
 
 func (sdk *MockSDK) GetVar(name string) (Variable, error) {
-	return Variable{}, ErrNotImplemented
+	for _, variable := range sdk.currentRow.Variables {
+		if variable.Name == name {
+			return variable, nil
+		}
+	}
+
+	return Variable{}, fmt.Errorf("variable not found: %s", name)
 }
 
 func (sdk *MockSDK) GetVarValue(name string) (interface{}, error) {
-	return nil, ErrNotImplemented
+	v, err := sdk.GetVar(name)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(v.Values) > 0 {
+		return v.Values[0], nil
+	}
+
+	return nil, fmt.Errorf("variable entry not found: %s", name)
 }
 
 func (sdk *MockSDK) GetVarValues(name string) (interface{}, error) {
-	//TODO implement me
-	return nil, ErrNotImplemented
+	v, err := sdk.GetVar(name)
+	if err != nil {
+		return nil, err
+	}
+
+	if v.Values != nil {
+		return v.Values, nil
+	} else {
+		return nil, fmt.Errorf("variable entries not found: %s", name)
+	}
 }
 
 func (sdk *MockSDK) GetLastVersion() int {
