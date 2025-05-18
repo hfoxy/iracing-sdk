@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// TODO: this didn't copy over well from iTelemetry - assume it doesn't work for the time being
+
 func main() {
 	logger := slog.Default()
 	sdk, err := irsdk.NewMock(irsdk.MockOptions{
