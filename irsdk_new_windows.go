@@ -3,7 +3,7 @@
 package irsdk
 
 import (
-	"github.com/hfoxy/iracing-sdk/pkg/winevents"
+	"github.com/hfoxy/iracing-sdk/winevents"
 	"github.com/hidez8891/shm"
 )
 

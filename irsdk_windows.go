@@ -4,9 +4,8 @@ package irsdk
 
 import (
 	"fmt"
+	"github.com/hfoxy/iracing-sdk/winevents"
 	"time"
-
-	"github.com/hfoxy/iracing-sdk/pkg/winevents"
 )
 
 // IRSDK is the main SDK object clients must use
