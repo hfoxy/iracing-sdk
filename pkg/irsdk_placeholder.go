@@ -3,7 +3,6 @@
 package irsdk
 
 import (
-	"fmt"
 	"time"
 )
 
