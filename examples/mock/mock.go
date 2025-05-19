@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	irsdk "github.com/hfoxy/iracing-sdk/pkg"
+	"github.com/hfoxy/iracing-sdk"
 	"log/slog"
 	"time"
 )

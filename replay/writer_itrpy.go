@@ -3,7 +3,7 @@ package replay
 import (
 	"compress/gzip"
 	"fmt"
-	"github.com/hfoxy/iracing-sdk/pkg/buf"
+	"github.com/hfoxy/iracing-sdk/buf"
 	"github.com/klauspost/compress/zstd"
 	"io"
 	"os"

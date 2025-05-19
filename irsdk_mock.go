@@ -7,7 +7,7 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
-	"github.com/hfoxy/iracing-sdk/pkg/replay"
+	"github.com/hfoxy/iracing-sdk/replay"
 	"log/slog"
 	"os"
 	"time"

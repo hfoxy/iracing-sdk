@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	irsdk "github.com/hfoxy/iracing-sdk/pkg"
+	"github.com/hfoxy/iracing-sdk"
 	"log/slog"
 	"time"
 )
@@ -36,7 +36,7 @@ func main() {
 
 			if ok && sdk.IsConnected() {
 				var v interface{}
-				v, err = sdk.GetVarValue("Speed")
+				v, err = sdk.GetVarValue("SessionTime")
 				logger.Info("data", "value", v)
 			}
 		case <-ctx.Done():

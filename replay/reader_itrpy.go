@@ -4,7 +4,7 @@ import (
 	"compress/gzip"
 	"errors"
 	"fmt"
-	"github.com/hfoxy/iracing-sdk/pkg/buf"
+	buf2 "github.com/hfoxy/iracing-sdk/buf"
 	"github.com/klauspost/compress/zstd"
 	"io"
 	"os"
@@ -15,7 +15,7 @@ type TelemetryReplayReader struct {
 	fileName  string
 	fileSize  int64
 	closeFunc func() error
-	reader    *buf.Buffer
+	reader    *buf2.Buffer
 
 	yamlData     string
 	variableData string
@@ -36,7 +36,7 @@ func NewTelemetryReplayReader(fileName string, fileSize int64) (Reader, error) {
 	var r io.Reader
 	r = f
 
-	cr := &buf.CountingReader{
+	cr := &buf2.CountingReader{
 		Reader: r,
 	}
 
@@ -77,7 +77,7 @@ func NewTelemetryReplayReader(fileName string, fileSize int64) (Reader, error) {
 		return nil, fmt.Errorf("unsupported file extension: %s", ext)
 	}
 
-	buffer := buf.NewReader(r, &cr.BytesRead)
+	buffer := buf2.NewReader(r, &cr.BytesRead)
 
 	return &TelemetryReplayReader{
 		fileName:  fileName,
