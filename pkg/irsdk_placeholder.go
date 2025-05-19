@@ -14,8 +14,6 @@ func New() (SDK, error) {
 	return &IRSDK{}, nil
 }
 
-var ErrNotImplemented = fmt.Errorf("not implemented - placeholder")
-
 func (sdk *IRSDK) RefreshSession() error {
 	//TODO implement me
 	return ErrNotImplemented

@@ -1,8 +1,11 @@
 package irsdk
 
 import (
+	"fmt"
 	"time"
 )
+
+var ErrNotImplemented = fmt.Errorf("not implemented - placeholder")
 
 type SDK interface {
 	WaitForData(timeout time.Duration) (bool, error)
