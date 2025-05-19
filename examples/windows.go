@@ -32,7 +32,7 @@ func main() {
 				return
 			}
 
-			if !ok || sdk.IsConnected() {
+			if !ok || !sdk.IsConnected() {
 				logger.Info("waiting for connection to be ready")
 			} else {
 				var v interface{}
