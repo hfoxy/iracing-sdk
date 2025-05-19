@@ -32,9 +32,9 @@ func main() {
 				return
 			}
 
-			logger.Info("data received", "ok", ok, "connected", sdk.IsConnected())
-
-			if ok && sdk.IsConnected() {
+			if !ok || sdk.IsConnected() {
+				logger.Info("waiting for connection to be ready")
+			} else {
 				var v interface{}
 				v, err = sdk.GetVarValue("SessionTime")
 				logger.Info("data", "value", v)
